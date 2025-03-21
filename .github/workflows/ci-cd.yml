@@ -44,5 +44,5 @@ jobs:
       - name: Deploy to staging server
         run: |
           cd python-app
-          scp -r . ec2-user@staging-server:/path/to/app
-          ssh ec2-user@staging-server "cd /path/to/app && python app.py"
+          scp -r . ec2-user@3.83.174.167:/home/ec2-user/app
+          ssh ec2-user@3.83.174.167 "cd /home/ec2-user/app && python app.py"
