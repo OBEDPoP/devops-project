@@ -43,4 +43,16 @@ jobs:
       - name: Deploy to staging server
         run: |
           scp -r python-app ec2-user@3.83.174.167:/home/ec2-user/app
-          ssh ec2-user@3.83.174.167 "cd /home/ec2-user/app && nohup python3 visitcount.py > /dev/null 2>&1 &"
+          # SSH into the server and deploy the new app
+          ssh ec2-user@3.83.174.167 << 'EOF'
+          cd /home/ec2-user/app
+
+          # Stop the old app (if running)
+          pkill -f "gunicorn" || true
+
+          # Install dependencies (if needed)
+          pip install -r requirements.txt
+
+          # Start the new app
+          nohup gunicorn --bind 0.0.0.0:5000 app:app > app.log 2>&1 &
+          EOF
