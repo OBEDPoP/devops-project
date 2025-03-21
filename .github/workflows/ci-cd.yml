@@ -48,11 +48,11 @@ jobs:
           cd /home/ec2-user/app
 
           # Stop the old app (if running)
-          pkill -f "gunicorn" || true
+          pkill -f "python3 visitcount.py" || true
 
           # Install dependencies (if needed)
           pip install -r requirements.txt
 
           # Start the new app
-          nohup gunicorn --bind 0.0.0.0:5000 app:app > app.log 2>&1 &
+          nohup python3 app.py > /dev/null 2>&1 &
           EOF
