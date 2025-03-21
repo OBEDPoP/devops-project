@@ -5,7 +5,6 @@ This document outlines the steps to set up a **CI/CD pipeline** for deploying a 
 ---
 
 ## Table of Contents
-
 1. [Prerequisites](#prerequisites)
 2. [Workflow Overview](#workflow-overview)
 3. [File Arrangement Diagram](#file-arrangement-diagram)
@@ -18,9 +17,7 @@ This document outlines the steps to set up a **CI/CD pipeline** for deploying a 
 ---
 
 ## Prerequisites
-
 Before starting, ensure you have the following:
-
 1. A **GitHub repository** with your Flask app code.
 2. A **remote server** (e.g., AWS EC2) with SSH access.
 3. An **SSH key pair** for authenticating with the remote server.
@@ -30,9 +27,7 @@ Before starting, ensure you have the following:
 ---
 
 ## Workflow Overview
-
 The CI/CD pipeline performs the following steps:
-
 1. **Build**:
    - Checks out the code.
    - Installs dependencies.
@@ -46,7 +41,6 @@ The CI/CD pipeline performs the following steps:
 ---
 
 ## File Arrangement Diagram
-
 Here’s the structure of the repository and remote server:
 
 ```
@@ -76,73 +70,15 @@ Remote Server:
 ### Option 1: GitHub Actions
 
 #### Step 1: Set Up GitHub Actions
-
 1. Go to your GitHub repository > **Settings** > **Secrets and variables** > **Actions**.
 2. Add the following secrets:
    - **`SSH_PRIVATE_KEY`**: Your SSH private key for accessing the remote server.
    - **`KNOWN_HOSTS`**: The `known_hosts` entry for your server (run `ssh-keyscan <server-ip>` to generate this).
 
 #### Step 2: Create the GitHub Actions Workflow
-
-1. In your repository, create a `.github/workflows/ci-cd.yml` file with the following content:
-   ```yaml
-   name: CI/CD Pipeline
-
-   on:
-     push:
-       branches:
-         - main
-
-   jobs:
-     build:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v3
-
-         - name: Set up Python
-           uses: actions/setup-python@v4
-           with:
-             python-version: '3.x'
-
-         - name: Install dependencies
-           run: |
-             cd python-app
-             python -m pip install --upgrade pip
-             pip install -r requirements.txt
-
-         - name: Run unit tests
-           run: |
-             cd python-app
-             python -m unittest test_app.py
-
-     deploy:
-       needs: build
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v3
-
-         - name: Install SSH key
-           uses: shimataro/ssh-key-action@v2
-           with:
-             key: ${{ secrets.SSH_PRIVATE_KEY }}
-             known_hosts: ${{ secrets.KNOWN_HOSTS }}
-
-         - name: Deploy to staging server
-           run: |
-             scp -r python-app ec2-user@3.83.174.167:/home/ec2-user/app
-
-             ssh ec2-user@3.83.174.167 << 'EOF'
-             cd /home/ec2-user/app
-             pkill -f "gunicorn" || true
-             pip install -r requirements.txt
-             nohup gunicorn --bind 0.0.0.0:5000 app:app > app.log 2>&1 &
-             EOF
-   ```
+1. In your repository, create a `.github/workflows/ci-cd.yml` file with the pipeline script.
 
 #### Step 3: Test the Pipeline
-
 1. Push changes to GitHub and verify the workflow runs successfully.
 2. Test the app by accessing `http://<server-ip>:5000`.
 
@@ -150,16 +86,31 @@ Remote Server:
 
 ### Option 2: Jenkins
 
-Refer to the guide for setting up Jenkins similar to the GitHub Actions method.
+#### Step 1: Set Up Jenkins
+1. **Install Jenkins** and required plugins:
+   - **Pipeline**, **Git**, **SSH Agent**, **GitHub Integration**.
+
+2. **Configure Jenkins Credentials**:
+   - Add **SSH Private Key** under **Manage Jenkins** > **Manage Credentials**.
+
+#### Step 2: Create a Jenkins Pipeline
+1. In your repository, create a `Jenkinsfile` with the pipeline script.
+
+#### Step 3: Configure GitHub Webhook
+1. Go to **GitHub repository > Settings > Webhooks > Add webhook**.
+2. Set the payload URL to `http://<jenkins-server>:8080/github-webhook/`.
+3. Configure Jenkins to accept webhooks.
+
+#### Step 4: Test the Pipeline
+1. Push changes to GitHub and trigger the Jenkins pipeline.
+2. Verify the app is deployed and accessible at `http://<server-ip>:5000`.
 
 ---
 
 ## Optional: Use Systemd for Better Reliability
-
 For better reliability, use **systemd** to run the app as a service.
 
 ### Step 1: Create a Systemd Service File
-
 On the remote server, create a service file (`/etc/systemd/system/flask-app.service`):
 
 ```ini
@@ -178,7 +129,6 @@ WantedBy=multi-user.target
 ```
 
 ### Step 2: Reload Systemd and Start the Service
-
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl start flask-app
@@ -186,7 +136,6 @@ sudo systemctl enable flask-app
 ```
 
 ### Step 3: Update the Deployment Script
-
 Modify the `Deploy to staging server` step to copy files and restart the service:
 
 ```yaml
@@ -199,9 +148,7 @@ Modify the `Deploy to staging server` step to copy files and restart the service
 ---
 
 ## Troubleshooting
-
 1. **App Not Running**:
-
    - Check the logs on the remote server:
      ```bash
      cat /home/ec2-user/app/app.log
@@ -209,16 +156,13 @@ Modify the `Deploy to staging server` step to copy files and restart the service
    - Verify the app is bound to `0.0.0.0` and not `127.0.0.1`.
 
 2. **App Not Accessible**:
-
    - Ensure the EC2 security group allows inbound traffic on port `5000`.
    - Check the server’s firewall rules (e.g., `ufw` or `iptables`).
 
 3. **Deployment Fails**:
-
    - Check the GitHub Actions or Jenkins logs for errors.
    - Verify the SSH key and `known_hosts` entry are correct.
 
 ---
 
-By following this guide, you’ll have a fully automated CI/CD pipeline for deploying your Flask app using either **GitHub Actions** or **Jenkins**.
-
+By following this guide, you’ll have a fully automated CI/CD pipeline for deploying your Flask app using either **GitHub Actions** or **Jenkins**, including webhook triggers and Jenkins path configuration.
