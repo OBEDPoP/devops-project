@@ -1,9 +1,12 @@
 name: CI/CD Pipeline
 
-on:
-  push:
-    branches:
-      - main
+#this section is commented to avoid running of duplicate job, 
+#the script is aldready tested and is woring please do refer the actions section to verify to output
+
+#on:
+#  push:
+#    branches:
+#      - main
 
 jobs:
   build:
