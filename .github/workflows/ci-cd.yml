@@ -54,5 +54,5 @@ jobs:
           pip install -r requirements.txt
 
           # Start the new app
-          nohup python3 app.py > /dev/null 2>&1 &
+          nohup python3 visitcount.py > /dev/null 2>&1 &
           EOF
