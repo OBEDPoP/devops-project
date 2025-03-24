@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Expression Evaluator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+        }
+        textarea {
+            width: 50%;
+            height: 200px;
+        }
+        .output {
+            width: 50%;
+            padding: 20px;
+            border-left: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <textarea id="jsonInput" placeholder='Enter JSON: [{"val":"25"},{"opr":"*"},{"val":"2"},{"opr":"**"},{"val":"3"}]'></textarea>
+        <div class="output">
+            <h3>Output:</h3>
+            <p id="result">Result will be displayed here</p>
+            <button onclick="evaluateExpression()">Evaluate</button>
+        </div>
+    </div>
+
+    <script>
+        function evaluateExpression() {
+            let input = $("#jsonInput").val();
+            try {
+                let jsonData = JSON.parse(input);
+                $.ajax({
+                    url: "/evaluate",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ expression: jsonData }),
+                    success: function(response) {
+                        $("#result").text(response.result);
+                    },
+                    error: function() {
+                        $("#result").text("Error in evaluation.");
+                    }
+                });
+            } catch (e) {
+                $("#result").text("Invalid JSON format.");
+            }
+        }
+    </script>
+</body>
+</html>
+
