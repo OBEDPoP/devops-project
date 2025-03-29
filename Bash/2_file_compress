@@ -1,0 +1,36 @@
+#!/bin/bash
+#------------------------------------------------------------------------------#
+# Author: OBED PAUL
+# Date Created: 27/03/2025
+# Date Modified: 27/03/2025
+
+# Discription:
+# Section 1:---
+# compresses files in a given path
+# section 2:---
+# compresses the file specified whichever is greater than 100M size
+
+# USAGE:
+# permission: chmod 754 2_file_compress
+# run:  ./2_file_compress file_path  
+# Note: file_path not provided will consider current directory
+#------------------------------------------------------------------------------#
+
+
+#Section 1---
+#by default checks for $1 input but if it is empty then it can use current directory as default
+dir=${1:-~/*}
+
+#compress files in current directory if Dir input missing .tar(-cvf)
+tar -cvf ./my_backup_1_"$(date +%d-%m-%Y_%H-%M-%S)".tar "$dir" 2>/dev/null
+
+#Section 2---
+path=$(pwd)
+DIR={$1:-$path}
+
+#compress files in current directory if input missing .tar.gz(-czf)
+find "$DIR" -type f -size +100M -exec sh -c 'tar -czf "${1}_"$(date +%d-%m-%Y_%H-%M-%S)".tar.gz" "$1"' _ {} \;
+
+
+exit 0
+

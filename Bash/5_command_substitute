@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Author: OBED PAUL
+# Created date: 27/03/2025
+# Modified Date: 27/03/2025
+
+
+# Description:
+# Use output of one command into another command $(command)
+# here it just saves output of date and runs it in echo command
+
+# Usage:
+# ./5_command_substitute
+
+echo "you are running 5_command_substitute script"
+
+time=$(date +%d:%m:%Y:%H:%M:%S)
+
+echo "$USER ran this on $time" 
+
+echo "task completed!"
+
+exit 0

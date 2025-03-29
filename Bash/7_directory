@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+# Author: OBED PAUL
+# Created Date: 27/03/2025
+# Modified Date: 27/03/2025
+
+# Description:
+# directories using "~"
+
+# Usage:
+# ./7_directory
+
+echo "current directory $PWD"
+echo "previous directory $OLDPWD"
+
+echo "current directory:"
+~+ #command to print current directory i.e., $PWD
+
+echo "old directory:"
+~- #command to print previous directory i.e., $OLDPWD
+
+echo "home directory of user:"
+~ #command for home directory of current user
+
+echo "home directory of root user ~root:"
+~root # syntax ~username returns respective user home directory
+
+exit 0
+
+

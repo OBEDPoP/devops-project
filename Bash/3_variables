@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Author: OBED PAUL
+# Date Created: 27/03/2025
+# Date Modified: 27/03/2025
+
+# Description
+#
+# assign: variable=value (no space allowed)
+# reference/use: ${variable}
+
+# Usage
+# ./3_variables
+
+Employee="Sarah"
+echo "Dear ${Employee}"
+echo "The board and I would like to thank you for your excellet perfomance you have been doing for last few months."
+echo "Keep up the good work"
+echo "Best Wishes,"
+echo "Murali, CEO"
+
+

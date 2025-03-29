@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#-----------------------------------------------------------#
+# Author: OBED PAUL
+# Created Date: 27/03/2025
+# Modified Date: 27/03/2025
+
+# Discription:
+# Section 1
+# Arithmatic operators syntax $(( operation ))
+# Section 2
+# decimal calculator echo "scale=decimal_places; operation" | bc
+# awk %.2f to filter upto 2 decimals
+
+# Usage:
+# run: ./6_arithmatic 8
+#-----------------------------------------------------------#
+
+x=4
+y=2
+z=${1:-20} #checks for input after command Ex: 6_arithmatic 25 id missing uses 20 as default value
+
+echo " x + y * input/z is $(( ($x + $y) * $1 ))"
+echo " y % x ** input/z is $(( y % ( x ** $1) ))"
+
+echo "Using bc command to get upto 2 decimal places of 28/3"
+echo "scale=2; 28/3" | bc
+
+RESULT=$(awk "BEGIN {printf \"%.2f\", $z / $y}")
+echo "using aws  z/y $RESULT"
+exit 0

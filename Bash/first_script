@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Author: OBED PAUL
+# Date Created:  27/03/2025
+# Last Modified: 27/03/2025
+
+# Description
+# This script prints a output using echo command
+
+# Usage
+# permission: chmod +x first_script
+# Run: ./first_script
+
+#print output
+echo "this is first script printing first out"
+exit 0

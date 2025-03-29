@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#------------------------------------------------------------------#
+# Author: OBED PAUL
+# Date Create: 27/03/2025
+# Date Modified: 27/03/2025
+#
+# Description:
+# Playing with variables
+# Part 1: Changeing Upper Case/Lower Case, check var length
+
+# Usage:
+# Part 1: ./4_play_with_variable lowercase_word UPPERCASE_WORD 
+
+#------------------------------------------------------------------#
+
+
+#Part 1
+
+name1=${1:-word11one11}
+name2=${2:-WORD22TWO22}
+
+echo "${name1},${name2}"
+echo "change first case of first letter   : ${name1^},${name2,}"
+echo "change changing case of whole word  : ${name1^^},${name2,,}"
+echo "the legth of $name1 is ${#name1}, $name2 is ${#name2}"
+echo "string 1 to 5 of name1 is           : ${name1:0:4}"
+echo "string after 3rd letter of name2 is : ${name2:2}"
+echo "printing 3 letter from a -6 placeholder : ${name1: -6:3}"
+
+exit 0
