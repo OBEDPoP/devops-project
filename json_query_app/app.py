@@ -25,6 +25,8 @@ def index():
 def evaluate():
     try:
         data = request.json.get('expression', [])
+        if not data:  
+            return jsonify({"error": "Empty expression"})
         result = evaluate_expression(data)
         return jsonify({"result": result})
     except Exception as e:
@@ -32,11 +34,4 @@ def evaluate():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-# Steps to Run Locally:
-# 1. Install Flask if not already installed: pip install flask
-# 2. Save this script as app.py
-# 3. Create a 'templates' folder in the same directory and add 'index.html' inside it.
-# 4. Run the script using: python app.py
-# 5. Open your browser and go to: http://<your-ip>:5000 (Replace <your-ip> with your system's IP)
 
